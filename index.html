@@ -7,6 +7,7 @@
       .c1{height:15rem;text-align:center}
       .container{width:20rem;border:1px solid gray;padding:0.5rem;
       border-radius:1rem;float:left}
+      .areav{margin-left:1rem;cursor:pointer;box-shadow:1px 1px 1px 1px gray;padding:0.2rem}
     </style>
   </head>
   <body id="mbody">
@@ -28,12 +29,15 @@
         }
       ]
       let inHtml = ""
+      let hash=0
       for(const contents_obj of data_sets){
         inHtml += `<div class="contents">
-                    <h3>${contents_obj.contents_title}</h3>
-                    <p>${contents_obj.contents_desc}</p>`
+                    <div class="areav" sw="false" info="z${hash}">
+                      <h3>${contents_obj.contents_title}</h3>
+                      <p>${contents_obj.contents_desc}</p>
+                    </div>`
           for(const containers_obj of contents_obj.containers){
-            inHtml += `<div class="container">
+            inHtml += `<div class="container z${hash}" style="display:none">
               <div class="c1">
                 <img src="${containers_obj.img_src}" style="height:100%;width:auto"/>
               </div>
@@ -41,6 +45,7 @@
               <p class="c3">${containers_obj.img_content}</p>
             </div>`
           }
+          hash++
           inHtml+=`</div><div id="dispimg"
            style="display:none;background:white;border-radius:1rem;
            z-index:2;text-align:center;position:absolute;top:4rem;left:4rem;
@@ -66,6 +71,33 @@
         dispimg.innerHTML = `<img src="${this.src}" style="width:auto;height:100%">`
         dispimg.style.display="block"
         discover.style.display="block"
+      }
+      const areav = document.getElementsByClassName("areav");
+      const container = document.getElementsByClassName("container")
+      for(const are of areav){
+        are.addEventListener("click",accord)
+      }
+      function accord(){
+        console.log(this.attributes.info.nodeValue)
+        for(const con of container){
+          con.style.display="none"
+        }
+        
+        const viewdata = 
+          document.getElementsByClassName(this.attributes.info.nodeValue)
+        console.log(this.attributes.sw.nodeValue)
+        for(const v of viewdata){
+          if(this.attributes.sw.nodeValue=="true"){
+            v.style.display="none"
+          }else{
+            v.style.display="block"
+          }
+        }
+        if(this.attributes.sw.nodeValue=="true"){
+          this.attributes.sw.nodeValue="false"
+        }else{
+          this.attributes.sw.nodeValue="true"
+        }
       }
 
 
